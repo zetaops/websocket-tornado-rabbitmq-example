@@ -8,7 +8,10 @@ This example demonstrates bidirectional communication between browser and backgr
 
 ### Testing
 
-Run `` server.py `` and open http://127.0.0.1:9001 on your browser. 
+First run the `` worker.py `` as is or pass the number of worker sub-processes like this: `` worker.py manage=N `` 
+
+Then run the `` server.py `` and open http://127.0.0.1:9001 on your browser and press "Run" button. 
+
 
 
 ### Screenshot
