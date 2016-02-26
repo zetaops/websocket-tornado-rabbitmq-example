@@ -1,0 +1,122 @@
+<html>
+<style>
+    body {
+        background-color: gray;
+        font-size: 8px;
+        color: white;
+        font-weight: bold;
+        overflow: hidden;
+        font-family: "Lato", "proxima-nova", "Helvetica Neue", Arial, sans-serif;
+    }
+</style>
+<body>
+
+
+</body>
+
+<script language="javascript" type="text/javascript">
+
+    var wsUri = "ws://localhost:9001/ws";
+
+    var output;
+    var dobutton;
+    var sentMessages = [];
+    var totalSent = 0;
+    var run = true;
+    var MSG_TARGET = 50;
+    var stillSending = true;
+
+    var websocket = new WebSocket(wsUri);
+    websocket.onopen = function (evt) {
+        onOpen(evt)
+    };
+    websocket.onclose = function (evt) {
+        onClose(evt)
+    };
+    websocket.onmessage = function (evt) {
+        onMessage(evt)
+    };
+    websocket.onerror = function (evt) {
+        onError(evt)
+    };
+
+
+    function onOpen(evt) {
+        writeToScreen("CONNECTED");
+
+    }
+
+    function onClose(event) {
+        if (event.code == 1000) {
+            writeToScreen("CONN CLOSED");
+            changeBG('green');
+        }
+        else {
+            writeToScreen(event.code);
+            changeBG('red');
+        }
+    }
+
+    function onMessage(event) {
+        var msg = event.data;
+        if (sentMessages.indexOf(msg) > -1) {
+            sentMessages.splice(sentMessages.indexOf(msg), 1);
+            printStatus('green');
+//            if(!stillSending && sentMessages.length == 0){
+//                websocket.close(1000);
+//            }
+        } else {
+            stopSending();
+            websocket.close();
+            changeBG('red');
+            console.log("not found msg: " + msg);
+            console.log(sentMessages);
+        }
+
+    }
+    function stopSending() {
+        stillSending = false;
+    }
+    function onError(evt) {
+        changeBG('red');
+        writeToScreen(evt)
+        console.log("Error :: " + evt);
+    }
+
+    function doSend() {
+        totalSent += 1;
+
+        var rndMsg = getRandMsg();
+        sentMessages.push(rndMsg);
+        websocket.send(rndMsg);
+        printStatus('green');
+        if(totalSent == MSG_TARGET){
+            stopSending()
+        }
+        if(stillSending) doSend();
+    }
+
+
+    function printStatus(color){
+        changeBG(color);
+        var stck_len = sentMessages.length;
+        var received = totalSent - stck_len;
+        writeToScreen("SENT: " + totalSent + "<br>WAIT: " + stck_len + "<br>RCVD: " + received);
+    }
+
+    function writeToScreen(message) {
+        document.body.innerHTML = message;
+    }
+    function changeBG(color) {
+        document.body.style.background = color;
+    }
+    function getRandMsg() {
+        return Math.random().toString(36).substring(7);
+    }
+    var params = window.location.hash.replace('#','').split('|');
+    MSG_TARGET = parseInt(params[0])|| 1000;
+    setTimeout("doSend()", 1000);
+
+</script>
+
+</html>

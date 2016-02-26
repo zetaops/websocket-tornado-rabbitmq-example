@@ -1,0 +1,50 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Multi client websocket test</title>
+    <style>
+        #frames {
+            width: 100%;
+        }
+
+        #frames iframe {
+            float: left;
+            height: 60px;
+            width: 120px;
+            margin: 2px;
+            background-color: gray;
+            overflow: hidden;
+            border: 0;
+        }
+
+    </style>
+</head>
+<body>
+
+<h4>This is multi client websocket test.</h4>
+<br/>
+Concurrency: <input type="number" value="10" id="no_of_frames" style="width: 50px"><br/>
+Total message count: <input type="number" value="10000" id="total_msg" style="width: 70px">
+<button id="run">run!</button>
+<br/>
+<br/>
+<div id="frames"></div>
+</body>
+<script>
+    document.getElementById("run").addEventListener('click', run);
+    function run() {
+        var noOfFrames = document.getElementById("no_of_frames").value,
+                frames = document.getElementById('frames'),
+                totalMsgPerFrm = parseInt(document.getElementById("total_msg").value / noOfFrames),
+                wsUri = "http://localhost:9001/connect#" + totalMsgPerFrm;
+        frames.innerHTML = '';
+        for (i = 1; i <= noOfFrames; i++) {
+            frames.innerHTML += "<iframe scrolling='no' src='" + wsUri + "' />";
+
+
+        }
+    }
+
+</script>
+</html>
