@@ -1,6 +1,6 @@
 ##WebSocket - Tornado - RabbitMQ - Worker Process Example
 
-This example demonstrates bidirectional communication between browser and background worker processes over Tornado / Pika / RabbitMQ.
+This example demonstrates realtime bidirectional communication between multiple browser clients and background worker processes over Tornado / Pika / RabbitMQ.
  
  Inbound messages routed through a single channel via "topic" type exchange to multiple workers. Session ID's passed with "routing_key"s. 
  
