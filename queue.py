@@ -86,7 +86,7 @@ class PikaClient(object):
         if not self.received_message_counter % 1000:
             print("Total Received: %s " % self.received_message_counter)
         self.in_channel.basic_publish(exchange='tornado_input',
-                              routing_key='in.%s' % sess_id,
+                              routing_key=sess_id,
                               body=message)
 
     def on_message(self, channel, method, header, body):

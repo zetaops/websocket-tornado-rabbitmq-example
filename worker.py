@@ -52,7 +52,7 @@ class Worker(object):
             properties:
             body: message body
         """
-        sess_id = method.routing_key[3:]
+        sess_id = method.routing_key
         self.worker(sess_id)
         if self.connection.is_closed:
             print("Connection is closed, re-opening...")
