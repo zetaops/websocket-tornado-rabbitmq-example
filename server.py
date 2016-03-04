@@ -9,9 +9,11 @@ from uuid import uuid4
 
 from tornado import websocket, web, ioloop
 
+
 class IndexHandler(web.RequestHandler):
     def get(self):
         self.render("index.html")
+
 
 class SocketHandler(websocket.WebSocketHandler):
     def check_origin(self, origin):
@@ -33,27 +35,26 @@ class SocketHandler(websocket.WebSocketHandler):
         """
         self.application.pc.unregister_websocket(self._get_sess_id())
 
+
 class Connect(web.RequestHandler):
 
     @web.asynchronous
     def get(self, *args):
-        with open('connector.html') as fh:
-            self.write(fh.read())
-            self.finish()
+        self.render('connector.html')
+
 
 class Index(web.RequestHandler):
 
     @web.asynchronous
     def get(self, *args):
-        with open('index.html') as fh:
-            self.write(fh.read())
-            self.finish()
+        self.render('index.html')
 
 app = web.Application([
     (r'/ws', SocketHandler),
     (r'/connect', Connect),
     (r'/', Index),
 ])
+
 
 def runserver():
     my_ioloop = ioloop.IOLoop.instance()

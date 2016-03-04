@@ -74,7 +74,7 @@ def manage_processes():
     no_subprocess = [arg.split('manage=')[-1] for arg in sys.argv if 'manage' in arg][0]
     print("starting %s workers" % no_subprocess)
     for i in range(int(no_subprocess)):
-        proc = subprocess.Popen(["python", "worker.py"],
+        proc = subprocess.Popen([sys.executable, __file__],
                                 stdout=subprocess.PIPE,
                                 stderr=subprocess.PIPE)
         child_pids.append(proc.pid)
